@@ -1,0 +1,42 @@
+name: CI & SonarCloud - NestJS
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  sonarcloud:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Nécessaire pour que Sonar analyse l'historique git
+
+      - name: Configuration de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Exécution des tests et génération de la couverture
+        run: npm run test:cov
+
+      - name: Analyse SonarCloud
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Fourni automatiquement par GitHub
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=mon-orga-sonarcloud
+            -Dsonar.projectKey=collector-shop-nestjs
+            -Dsonar.sources=src
+            -Dsonar.tests=src,test
+            -Dsonar.test.inclusions=**/*.spec.ts,**/*.e2e-spec.ts
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
