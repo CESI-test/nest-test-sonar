@@ -32,11 +32,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Fourni automatiquement par GitHub
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.organization=CESI-test
-            -Dsonar.projectKey=collector-shop-nestjs
-            -Dsonar.sources=src
-            -Dsonar.tests=src,test
-            -Dsonar.test.inclusions=**/*.spec.ts,**/*.e2e-spec.ts
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
