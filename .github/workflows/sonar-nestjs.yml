@@ -34,7 +34,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.organization=mon-orga-sonarcloud
+            -Dsonar.organization=CESI-test
             -Dsonar.projectKey=collector-shop-nestjs
             -Dsonar.sources=src
             -Dsonar.tests=src,test
